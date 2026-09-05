@@ -65,6 +65,11 @@ COPY Gemfile Gemfile.lock ./
 RUN apk update && apk add --no-cache build-base musl ruby-full ruby-dev gcc make musl-dev openssl openssl-dev g++ linux-headers xz vips
 RUN bundle config set --local force_ruby_platform true
 
+# gRPC compiles from source on Alpine. Limiting parallelism prevents build-time
+# memory exhaustion on constrained builders without changing runtime behavior.
+ARG GRPC_RUBY_BUILD_PROCS=2
+ENV GRPC_RUBY_BUILD_PROCS=${GRPC_RUBY_BUILD_PROCS}
+
 # Do not install development or test gems in production
 RUN if [ "$RAILS_ENV" = "production" ]; then \
   bundle config set without 'development test'; bundle install -j 4 -r 3; \
