@@ -154,6 +154,12 @@ Rails.application.routes.draw do
             end
           end
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
+          resources :pipelines, only: [:index] do
+            member do
+              get 'stages/:stage_id', action: :stage, as: :stage
+              patch 'conversations/:conversation_id', action: :move, as: :move_conversation
+            end
+          end
           namespace :channels do
             resource :twilio_channel, only: [:create]
           end

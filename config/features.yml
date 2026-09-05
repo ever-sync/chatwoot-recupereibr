@@ -272,3 +272,7 @@
   display_name: Delayed Automations
   enabled: false
   column: feature_flags_ext_1
+- name: pipelines
+  display_name: Conversation Pipelines
+  enabled: false
+  column: feature_flags_ext_1

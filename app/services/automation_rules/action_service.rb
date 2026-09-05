@@ -54,6 +54,25 @@ class AutomationRules::ActionService < ActionService
     Messages::MessageBuilder.new(nil, @conversation.reload, params).perform
   end
 
+  def move_to_pipeline_stage(params)
+    pipeline_id, stage_id = params.first.to_s.split('::', 2)
+    stage = PipelineStage.joins(:pipeline).find_by!(
+      id: stage_id,
+      pipelines: { id: pipeline_id, account_id: @account.id }
+    )
+    from_stage = @conversation.pipeline_stage
+
+    ActiveRecord::Base.transaction do
+      @conversation.update!(pipeline_stage: stage)
+      PipelineStageEvent.create!(
+        account: @account,
+        conversation: @conversation,
+        from_stage: from_stage,
+        to_stage: stage
+      )
+    end
+  end
+
   def send_email_to_team(params)
     teams = Team.where(id: params[0][:team_ids])
 

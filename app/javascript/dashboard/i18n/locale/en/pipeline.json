@@ -1,0 +1,60 @@
+{
+  "SIDEBAR": {
+    "KANBAN": "Kanban"
+  },
+  "PIPELINE": {
+    "TITLE": "Kanban de atendimento",
+    "REFRESH": "Atualizar",
+    "LOADING": "Carregando...",
+    "LOAD_MORE": "Carregar mais",
+    "EMPTY_STAGE": "Nenhum atendimento nesta etapa",
+    "UNASSIGNED": "Sem responsável",
+    "MOVE_TO": "Mover para a etapa",
+    "OPEN_CONVERSATION": "Abrir conversa número {id}",
+    "CONVERSATION_META": "#{id} · {inbox}",
+    "MOVE_SUCCESS": "Atendimento movido para {stage}",
+    "FILTERS": {
+      "SEARCH": "Pesquisar atendimentos",
+      "SEARCH_PLACEHOLDER": "Nome, telefone ou número da conversa",
+      "PIPELINE": "Selecionar funil",
+      "INBOX": "Filtrar por caixa de entrada",
+      "ASSIGNEE": "Filtrar por responsável",
+      "PRIORITY": "Filtrar por prioridade",
+      "STATUS": "Filtrar por status",
+      "ALL_INBOXES": "Todas as caixas",
+      "ALL_AGENTS": "Todos os responsáveis",
+      "ALL_PRIORITIES": "Todas as prioridades",
+      "ALL_STATUSES": "Todos os status",
+      "CLEAR": "Limpar filtros"
+    },
+    "METRICS": {
+      "TOTAL": "No quadro",
+      "URGENT": "Urgentes",
+      "UNASSIGNED": "Sem responsável",
+      "DOCUMENTS": "Aguardando laudo",
+      "CLIENTS": "Clientes"
+    },
+    "PRIORITY": {
+      "LOW": "Baixa",
+      "MEDIUM": "Média",
+      "HIGH": "Alta",
+      "URGENT": "Urgente"
+    },
+    "STATUS": {
+      "OPEN": "Aberto",
+      "RESOLVED": "Resolvido",
+      "PENDING": "Pendente",
+      "SNOOZED": "Adiado"
+    },
+    "TIME": {
+      "MINUTES": "há {count} min",
+      "HOURS": "há {count} h",
+      "DAYS": "há {count} d"
+    },
+    "ERRORS": {
+      "LOAD": "Não foi possível carregar o Kanban.",
+      "LOAD_MORE": "Não foi possível carregar mais atendimentos.",
+      "MOVE": "Não foi possível mover o atendimento. Tente novamente."
+    }
+  }
+}

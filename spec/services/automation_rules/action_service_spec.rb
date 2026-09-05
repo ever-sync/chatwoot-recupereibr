@@ -202,6 +202,38 @@ RSpec.describe AutomationRules::ActionService do
       end
     end
 
+    describe '#perform with move_to_pipeline_stage action' do
+      let!(:pipeline) { create(:pipeline, account: account) }
+      let!(:from_stage) { create(:pipeline_stage, pipeline: pipeline, position: 0) }
+      let!(:to_stage) { create(:pipeline_stage, pipeline: pipeline, position: 1) }
+
+      before do
+        conversation.update!(pipeline_stage: from_stage)
+        rule.update!(
+          actions: [
+            {
+              action_name: 'move_to_pipeline_stage',
+              action_params: ["#{pipeline.id}::#{to_stage.id}"]
+            }
+          ]
+        )
+      end
+
+      it 'moves the conversation and records the transition' do
+        expect do
+          described_class.new(rule, account, conversation).perform
+        end.to change(PipelineStageEvent, :count).by(1)
+
+        expect(conversation.reload.pipeline_stage).to eq(to_stage)
+        expect(PipelineStageEvent.last).to have_attributes(
+          account_id: account.id,
+          conversation_id: conversation.id,
+          from_stage_id: from_stage.id,
+          to_stage_id: to_stage.id
+        )
+      end
+    end
+
     describe '#perform with assign_agent action' do
       before do
         create(:inbox_member, inbox: conversation.inbox, user: agent)

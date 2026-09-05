@@ -118,6 +118,9 @@ class Conversation < ApplicationRecord
   belongs_to :contact_inbox
   belongs_to :team, optional: true
   belongs_to :campaign, optional: true
+  belongs_to :pipeline_stage, optional: true
+
+  has_many :pipeline_stage_events, dependent: :delete_all
 
   has_many :mentions, dependent: :destroy_async
   has_many :messages, dependent: :destroy_async, autosave: true

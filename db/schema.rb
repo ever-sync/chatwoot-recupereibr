@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_08_14_000000) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_05_190000) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -881,6 +881,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_08_14_000000) do
     t.text "cached_label_list"
     t.bigint "assignee_agent_bot_id"
     t.datetime "status_changed_at"
+    t.bigint "pipeline_stage_id"
     t.index ["account_id", "display_id"], name: "index_conversations_on_account_id_and_display_id", unique: true
     t.index ["account_id", "id"], name: "index_conversations_on_id_and_account_id"
     t.index ["account_id", "inbox_id", "status", "assignee_id"], name: "conv_acid_inbid_stat_asgnid_idx"
@@ -894,6 +895,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_08_14_000000) do
     t.index ["first_reply_created_at"], name: "index_conversations_on_first_reply_created_at"
     t.index ["identifier", "account_id"], name: "index_conversations_on_identifier_and_account_id"
     t.index ["inbox_id"], name: "index_conversations_on_inbox_id"
+    t.index ["pipeline_stage_id"], name: "index_conversations_on_pipeline_stage_id"
     t.index ["priority"], name: "index_conversations_on_priority"
     t.index ["status", "account_id"], name: "index_conversations_on_status_and_account_id"
     t.index ["status", "priority"], name: "index_conversations_on_status_and_priority"
@@ -1321,6 +1323,45 @@ ActiveRecord::Schema[7.1].define(version: 2026_08_14_000000) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "pipeline_stage_events", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "conversation_id", null: false
+    t.bigint "from_stage_id"
+    t.bigint "to_stage_id", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_pipeline_stage_events_on_account_id"
+    t.index ["conversation_id"], name: "index_pipeline_stage_events_on_conversation_id"
+    t.index ["from_stage_id"], name: "index_pipeline_stage_events_on_from_stage_id"
+    t.index ["to_stage_id"], name: "index_pipeline_stage_events_on_to_stage_id"
+    t.index ["user_id"], name: "index_pipeline_stage_events_on_user_id"
+  end
+
+  create_table "pipeline_stages", force: :cascade do |t|
+    t.bigint "pipeline_id", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "color", default: "#1f93ff"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pipeline_id", "position"], name: "index_pipeline_stages_on_pipeline_id_and_position"
+    t.index ["pipeline_id"], name: "index_pipeline_stages_on_pipeline_id"
+  end
+
+  create_table "pipelines", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.integer "position", default: 0, null: false
+    t.string "color", default: "#1f93ff"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "name"], name: "index_pipelines_on_account_id_and_name", unique: true
+    t.index ["account_id"], name: "index_pipelines_on_account_id"
+    t.index ["position"], name: "index_pipelines_on_position"
+  end
+
   create_table "platform_app_permissibles", force: :cascade do |t|
     t.bigint "platform_app_id", null: false
     t.string "permissible_type", null: false
@@ -1595,7 +1636,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_08_14_000000) do
   add_foreign_key "campaign_recipients", "campaigns", on_delete: :cascade
   add_foreign_key "campaign_recipients", "contacts", on_delete: :cascade
   add_foreign_key "campaign_recipients", "inboxes", on_delete: :cascade
+  add_foreign_key "conversations", "pipeline_stages"
   add_foreign_key "inboxes", "portals"
+  add_foreign_key "pipeline_stage_events", "accounts"
+  add_foreign_key "pipeline_stage_events", "conversations"
+  add_foreign_key "pipeline_stage_events", "pipeline_stages", column: "from_stage_id"
+  add_foreign_key "pipeline_stage_events", "pipeline_stages", column: "to_stage_id"
+  add_foreign_key "pipeline_stage_events", "users"
+  add_foreign_key "pipeline_stages", "pipelines"
+  add_foreign_key "pipelines", "accounts"
   add_foreign_key "user_sessions", "users"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").
