@@ -91,8 +91,16 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
   && rm -rf spec node_modules tmp/cache; \
   fi
 
-# Generate .git_sha file with current commit hash
-RUN git rev-parse HEAD > /app/.git_sha
+# Railway builds do not include the .git directory. Prefer Git when available
+# and fall back to the commit SHA injected by the platform.
+ARG RAILWAY_GIT_COMMIT_SHA
+RUN if git rev-parse --verify HEAD >/dev/null 2>&1; then \
+  git rev-parse HEAD > /app/.git_sha; \
+  elif [ -n "$RAILWAY_GIT_COMMIT_SHA" ]; then \
+  printf '%s\n' "$RAILWAY_GIT_COMMIT_SHA" > /app/.git_sha; \
+  else \
+  printf 'unknown\n' > /app/.git_sha; \
+  fi
 
 # Remove unnecessary files
 RUN rm -rf /gems/ruby/3.4.0/cache/*.gem \
