@@ -184,7 +184,7 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
 
 <template>
   <section
-    class="flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-n-surface-1"
+    class="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-n-surface-1"
   >
     <header class="shrink-0 border-b border-n-weak bg-n-solid-1 px-6 py-4">
       <div class="flex flex-wrap items-start justify-between gap-4">
@@ -268,7 +268,7 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
         <select
           v-model="pipelineId"
           :aria-label="t('PIPELINE.FILTERS.PIPELINE')"
-          class="h-9 rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500"
+          class="h-9 w-full rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500 sm:w-auto sm:min-w-44"
           @change="fetchBoard()"
         >
           <option
@@ -282,7 +282,7 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
         <select
           v-model="inboxId"
           :aria-label="t('PIPELINE.FILTERS.INBOX')"
-          class="h-9 rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500"
+          class="h-9 w-full rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500 sm:w-auto sm:min-w-44"
         >
           <option :value="null">{{ t('PIPELINE.FILTERS.ALL_INBOXES') }}</option>
           <option
@@ -296,7 +296,7 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
         <select
           v-model="assigneeId"
           :aria-label="t('PIPELINE.FILTERS.ASSIGNEE')"
-          class="h-9 rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500"
+          class="h-9 w-full rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500 sm:w-auto sm:min-w-44"
         >
           <option :value="null">{{ t('PIPELINE.FILTERS.ALL_AGENTS') }}</option>
           <option value="unassigned">{{ t('PIPELINE.UNASSIGNED') }}</option>
@@ -311,7 +311,7 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
         <select
           v-model="priority"
           :aria-label="t('PIPELINE.FILTERS.PRIORITY')"
-          class="h-9 rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500"
+          class="h-9 w-full rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500 sm:w-auto sm:min-w-40"
         >
           <option :value="null">
             {{ t('PIPELINE.FILTERS.ALL_PRIORITIES') }}
@@ -323,7 +323,7 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
         <select
           v-model="status"
           :aria-label="t('PIPELINE.FILTERS.STATUS')"
-          class="h-9 rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500"
+          class="h-9 w-full rounded-lg border border-n-weak bg-n-alpha-1 px-3 text-sm text-n-slate-11 outline-none focus:border-woot-500 sm:w-auto sm:min-w-40"
         >
           <option :value="null">
             {{ t('PIPELINE.FILTERS.ALL_STATUSES') }}
@@ -350,8 +350,8 @@ onBeforeUnmount(() => window.clearTimeout(searchTimer));
       <span class="i-lucide-loader-circle size-7 animate-spin text-woot-600" />
     </div>
 
-    <main v-else class="flex-1 overflow-x-auto overflow-y-hidden p-4">
-      <div class="flex h-full min-w-max gap-3">
+    <main v-else class="min-h-0 flex-1 overflow-x-auto overflow-y-hidden p-4">
+      <div class="flex h-full min-h-0 min-w-max gap-3">
         <PipelineColumn
           v-for="stage in stages"
           :key="stage.id"

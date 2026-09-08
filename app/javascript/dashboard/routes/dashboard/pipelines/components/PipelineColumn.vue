@@ -22,7 +22,7 @@ const handleDrop = event => {
 
 <template>
   <section
-    class="flex h-full w-[21rem] shrink-0 flex-col rounded-2xl border border-n-weak bg-n-alpha-1 transition"
+    class="flex h-full min-h-0 w-[21rem] shrink-0 flex-col rounded-2xl border border-n-weak bg-n-alpha-1 transition"
     :class="{ 'border-woot-500 bg-woot-50/40 dark:bg-woot-950/20': isOver }"
     @dragover.prevent="isOver = true"
     @dragleave.self="isOver = false"
@@ -45,7 +45,7 @@ const handleDrop = event => {
       </span>
     </header>
 
-    <div class="flex-1 space-y-2.5 overflow-y-auto px-2.5 pb-3">
+    <div class="min-h-0 flex-1 space-y-2.5 overflow-y-auto px-2.5 pb-3">
       <PipelineCard
         v-for="conversation in stage.conversations"
         :key="conversation.id"
