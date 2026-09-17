@@ -94,4 +94,8 @@ export default {
   ...pipeline,
   ...sessionLimit,
   ...yearInReview,
+  SIDEBAR: {
+    ...settings.SIDEBAR,
+    ...pipeline.SIDEBAR,
+  },
 };

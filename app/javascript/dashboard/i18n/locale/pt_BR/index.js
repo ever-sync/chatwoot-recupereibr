@@ -96,4 +96,8 @@ export default {
   ...whatsappTemplates,
   ...whatsappTemplateMgmt,
   ...yearInReview,
+  SIDEBAR: {
+    ...settings.SIDEBAR,
+    ...pipeline.SIDEBAR,
+  },
 };
