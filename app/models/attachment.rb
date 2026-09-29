@@ -105,6 +105,7 @@ class Attachment < ApplicationRecord
   end
 
   def audio_metadata
+    normalize_ogg_opus_content_type
     audio_file_data = base_data.merge(file_metadata)
     audio_file_data.merge(
       {
@@ -113,6 +114,13 @@ class Attachment < ApplicationRecord
         transcribed_text: meta&.[]('transcribed_text') || ''
       }
     )
+  end
+
+  def normalize_ogg_opus_content_type
+    return unless file.attached? && file.blob.content_type == 'audio/opus'
+    return unless %w[oga ogg].include?(File.extname(file.filename.to_s).delete_prefix('.').downcase)
+
+    file.blob.update!(content_type: 'audio/ogg')
   end
 
   def inline_audio_url
